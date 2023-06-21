@@ -75,7 +75,7 @@ class App extends React.Component {
         .then(photo =>
           this.setState(prevState => ({
             photo: [...prevState.photo, ...photo.hits],
-            searchTotal: photo.total,
+            searchTotal: photo.totalHits,
           }))
         )
         .catch(error => this.setState({ error }))
@@ -91,6 +91,7 @@ class App extends React.Component {
       searchTotal,
       loading,
     } = this.state;
+    const rounded_up = Math.ceil(searchTotal/12);
     return (
       <section className={css.app}>
         <Searchbar onSubmit={this.handlerFormSubmit} page={page} />
@@ -105,10 +106,11 @@ class App extends React.Component {
           < Modal closeModal={this.onModalClose} url={currentLargeImageURL} />
         )}
         {loading && <Loader />}
-        {!loading && searchTotal > 12 && <Button onClick={this.hendlerMoreClick} />}
+        {!loading &&  page < rounded_up && <Button onClick={this.hendlerMoreClick} />}
         <ToastContainer autoClose={2500} />
       </section>
     );
   }
 }
 export default App;
+ 
